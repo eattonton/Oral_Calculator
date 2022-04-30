@@ -62,7 +62,7 @@
             <li>口算练习机，适用于小朋友练习口算。</li>
             <li>输入完成后，“按钮Ok”判断是否正确。</li>
             <li>输入错误，“按钮Del”删除输入。</li>
-            <li>当前版本 v1.1</li>
+            <li>当前版本 v1.2</li>
             <li>Supported By TriWeb.cn</li>
         </ul>
     </div>
@@ -124,7 +124,11 @@
             }
         }else if(quest_mode2 == 2){
             //生成 比较题
-            return CreateQuestion2(hard, 1, 2);
+            if (hard_level == 1 || hard_level == 2 || hard_level == 3) {
+                return CreateQuestion2(hard, 1, 2);
+            }else if (hard_level == 4) {
+                return CreateQuestion2(hard, 3, 3);
+            }
         }
         return "";
     }
