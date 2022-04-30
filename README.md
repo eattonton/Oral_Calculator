@@ -3,7 +3,8 @@ one oral calculator application for schoolboy
 网页版的口算练习机，可以在手机上通过浏览器或者微信访问。适合小学生使用。
 
 # Demo Web
-演示网站 [口算练习机]("https://eattonton.github.io/Oral_Calculator/index.html") 
+演示网站 [口算练习机]("https://eattonton.github.io/Oral_Calculator/index.html")   
+https://eattonton.github.io/Oral_Calculator/index.html
 
 # 功能简绍
 1.可以选择加减的位数，10以内，100以内，1000以内。以及99乘法表  
