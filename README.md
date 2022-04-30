@@ -13,4 +13,4 @@ https://eattonton.github.io/Oral_Calculator/index.html
 
 # Present
 手机上面的效果  
-![手机页面](./oral.png)
+![手机页面](https://eattonton.github.io/Oral_Calculator/oral.png)
