@@ -1,3 +1,8 @@
+body{
+    max-width: 360px;
+    margin: auto;
+}
+
 .grade{
     height: 5em;
     margin-top: 25px;
@@ -54,14 +59,14 @@
 .mode .row .cell{
     display: block;
     width: 4.5em;
-    height: 1.5em;
-    border-radius: 0.2em;
+    height: 2.0em;
+    line-height: 2.0em;
+    border-radius: 0.3em;
     border: 2px solid rgb(2, 141, 134);
     margin: 6px;
     padding: 0;
     text-align: center;
-    line-height: 1.5em;
-    font-size: 1.0em;
+    font-size: 1.2em;
     font-weight: bold;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     background-color:rgb(1, 104, 105);
@@ -80,15 +85,15 @@
 
 .keyboards .row .cell{
     display: block;
-    width: 3.5em;
-    height: 3.5em;
-    line-height: 3.5em;
+    width: 2.2em;
+    height: 2.2em;
+    line-height: 2.2em;
     border-radius: 0.5em;
     border: 2px solid rgb(2, 141, 134);
     margin: 4px;
     padding: 0;
     text-align: center;
-    font-size: 1.4em;
+    font-size: 2.2em;
     font-weight: bold;
     font-family:'Courier New', Courier, monospace;
     background-color:darkturquoise;
