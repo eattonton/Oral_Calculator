@@ -312,7 +312,12 @@
             } else if (strInput == "Del") {
                 //删除输入
                 DeleteInput();
-                OutputQuest(quest_question + quest_blank);
+                //更新题目
+                if(quest_mode2 == 2){
+                    OutputQuest(quest_question + quest_blank + quest_result);
+                }else if(quest_mode2 == 1){
+                    OutputQuest(quest_question + quest_blank);
+                }
             } else if (strInput == "=" || strInput == "<" || strInput == ">") {
                 //比较题=2
                 if(quest_mode2 == 2){
