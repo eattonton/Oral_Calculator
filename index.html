@@ -1,12 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>口算练习机</title>
+    <link href="styles/style.css" rel="stylesheet"/>
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
 </head>
 <body>
-    
+    <div class="grade">
+
+    </div>
+    <div class="board">
+        <canvas id="board"></canvas>
+    </div>
+    <div class="mode">
+        <div class="row">
+            <div class="cell">1±1</div>
+            <div class="cell">2±2</div>
+            <div class="cell">3±3</div>
+            <div class="cell">1x÷1</div>
+            <div class="cell">2x÷2</div>
+        </div>
+    </div>
+    <div id="keyboard" class="keyboards">
+        <div class="row">
+            <div class="cell">1</div>
+            <div class="cell">2</div>
+            <div class="cell">3</div>
+            <div class="cell">Ok</div>
+        </div>
+        <div class="row">
+            <div class="cell">4</div>
+            <div class="cell">5</div>
+            <div class="cell">6</div>
+            <div class="cell">Del</div>
+        </div>
+        <div class="row">
+            <div class="cell">7</div>
+            <div class="cell">8</div>
+            <div class="cell">9</div>
+            <div class="cell">&nbsp;</div>
+        </div>
+        <div class="row">
+            <div class="cell">0</div>
+            <div class="cell">&gt;</div>
+            <div class="cell">&lt;</div>
+            <div class="cell">=</div>
+        </div>
+    </div>
 </body>
+<script type="text/javascript">
+
+
+    
+    //加载后
+    window.onload = function(){
+        //绑定按钮事件
+        $(".cell").on("click",(e)=>{
+            console.log($(e.target).text());
+        })
+    
+    }
+</script>
 </html>
