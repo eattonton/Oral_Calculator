@@ -1,6 +1,30 @@
 .grade{
     height: 5em;
+    margin-top: 25px;
 }
+
+.row{
+    display:flex; 
+    /*主轴垂直布局*/
+    flex-direction: row;
+    /*主轴 中间位置开始*/
+    justify-content: center;
+}
+
+.flower{
+    display: block;
+    width: 3.8em;
+    height: 3.8em;
+    margin: 5px;
+    background: url("../res/flower.png") no-repeat;
+    background-size: cover;
+}
+
+.flowerred{
+    background: url("../res/flower_red.png") no-repeat !important;
+    background-size: cover !important;
+}
+
 
 .board{
     background-color: #cdcdcd;
@@ -26,27 +50,20 @@
     margin-bottom: 15px;
 }
 
-.mode .row{
-    display:flex; 
-    /*主轴垂直布局*/
-    flex-direction: row;
-    /*主轴 中间位置开始*/
-    justify-content: center;
-}
 
 .mode .row .cell{
     display: block;
-    width: 3.5em;
+    width: 4.5em;
     height: 1.5em;
     border-radius: 0.2em;
     border: 2px solid rgb(2, 141, 134);
-    margin: 4.3px;
+    margin: 6px;
     padding: 0;
     text-align: center;
     line-height: 1.5em;
     font-size: 1.0em;
     font-weight: bold;
-    font-family:'Courier New', Courier, monospace;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     background-color:rgb(1, 104, 105);
     color: #fff;
 }
@@ -59,14 +76,6 @@
     /*主轴 中间位置开始*/
     justify-content: center;
     background-color:#fff;
-}
-
-.keyboards .row{
-    display:flex; 
-    /*主轴垂直布局*/
-    flex-direction: row;
-    /*主轴 中间位置开始*/
-    justify-content: center;
 }
 
 .keyboards .row .cell{
@@ -89,4 +98,12 @@
 .selected{
     color: black !important;
     background-color:cyan !important;      /*增加权重，否则后加属性不生效*/
+}
+
+.audios{
+    display: none;
+}
+
+ul li{
+    font-size: 1.1em;
 }

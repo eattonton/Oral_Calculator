@@ -5,24 +5,30 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>口算练习机</title>
-    <link href="styles/style.css" rel="stylesheet"/>
+    <title>口算练习机（口算，数学）</title>
+    <link href="styles/style.css" rel="stylesheet" />
     <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
 </head>
+
 <body>
     <div class="grade">
-
+        <div class="row">
+            <div class="flower"></div>
+            <div class="flower"></div>
+            <div class="flower"></div>
+            <div class="flower"></div>
+            <div class="flower"></div>
+        </div>
     </div>
     <div class="board">
         <canvas id="board"></canvas>
     </div>
     <div class="mode">
         <div class="row">
-            <div class="cell">1±1</div>
-            <div class="cell">2±2</div>
-            <div class="cell">3±3</div>
-            <div class="cell">1x÷1</div>
-            <div class="cell">2x÷2</div>
+            <div class="cell">I±I</div>
+            <div class="cell">II±II</div>
+            <div class="cell">III±III</div>
+            <div class="cell">IxI</div>
         </div>
     </div>
     <div id="keyboard" class="keyboards">
@@ -46,25 +52,289 @@
         </div>
         <div class="row">
             <div class="cell">0</div>
-            <div class="cell">&gt;</div>
             <div class="cell">&lt;</div>
+            <div class="cell">&gt;</div>
             <div class="cell">=</div>
         </div>
     </div>
+    <div>
+        <ul>
+            <li>口算练习机，适用于小朋友练习口算。</li>
+            <li>输入完成后，“按钮Ok”判断是否正确。</li>
+            <li>输入错误，“按钮Del”删除输入。</li>
+        </ul>
+    </div>
+    <div class="audios">
+        <audio id="audioclick" src="res/click.mp3"></audio>
+        <audio id="audioright" src="res/victory.mp3"></audio>
+        <audio id="audiowrong" src="res/fail.mp3"></audio>
+    </div>
 </body>
 <script type="text/javascript">
+    const canvas = document.getElementById("board");
+    const ctx = canvas.getContext("2d");
+    const boardWidth = canvas.width;
+    const boardHeight = canvas.height;
 
+    var quest = "";  //出的题目
+    var blank = "□";
+    var hard = 10;
+    var hard_level = 1;      //难度等级 1,2,3,4
+    var quest_mode1 = 0;  //题目的样式 + - x /
+    var quest_modes1 = {
+        1: "+",
+        2: "-",
+        3: "x",
+        4: "÷"
+    }
+    var quest_operator = "";   //  加减乘除
+    var quest_mode2 = 1;   //题目是 做 计算=1 还是 比较题=2
+    var quest_arg1 = 0;     //参数1
+    var quest_arg2 = 0;     //参数2
+    var quest_equal = "=";    // "=" "<" ">"
+    var quest_answer = 0;   //计算题答案
+    var quest_question = "";
+    var quest_blank = "";
+    var quest_result = "";
 
-    
+    var input_answerStr = "";
+
+    var flower_number = 5;
+    var flower_index = 0;
+    //生成随机值
+    function RandomInt(min, max) {
+        var span = max - min + 1;
+        var result = Math.floor(Math.random() * span + min);
+        return result;
+    }
+
+    //生成答案
+    function CreateQuestion() {
+        //随机生成时计算题 还是 比较题
+        quest_mode2 = RandomInt(1,2);
+        if (quest_mode2 == 1) {
+            quest_equal = "=";
+            //生成计算题
+            if (hard_level == 1 || hard_level == 2 || hard_level == 3) {
+                return CreateQuestion1(hard, 1, 2);
+            } else if (hard_level == 4) {
+                return CreateQuestion1(hard, 3, 3);
+            }
+        }else if(quest_mode2 == 2){
+            //生成 比较题
+            return CreateQuestion2(hard, 1, 2);
+        }
+        return "";
+    }
+
+    //生成正确的公式参数
+    function CreateFormulaArgument(hardMax, modeMin, modeMax){
+        hardMax = hardMax || 10;
+        modeMin = modeMin || 1;
+        modeMax = modeMax || modeMin;
+        quest_arg1 = RandomInt(1, hardMax);
+        quest_arg2 = RandomInt(1, hardMax);
+        //做法 + - x /
+        quest_mode1 = RandomInt(modeMin, modeMax);
+        if (quest_mode1 == 2 || quest_mode1 == 4) {
+            if (quest_arg2 > quest_arg1) {
+                [quest_arg1, quest_arg2] = [quest_arg2, quest_arg1];
+            }
+        }
+        if (quest_mode1 == 1) {
+            quest_answer = quest_arg1 + quest_arg2;
+        } else if (quest_mode1 == 2) {
+            quest_answer = quest_arg1 - quest_arg2;
+        } else if (quest_mode1 == 3) {
+            quest_answer = quest_arg1 * quest_arg2;
+        } else if (quest_mode1 == 4) {
+            quest_answer = quest_arg1 / quest_arg2;
+        }
+        //获得符号
+        quest_operator = quest_modes1[quest_mode1];
+    }
+    //生成题目--计算题
+    function CreateQuestion1(hardMax, modeMin, modeMax) {
+        //计算正确的方程
+        CreateFormulaArgument(hardMax, modeMin, modeMax);
+        
+        //预留的空格
+        if (quest_answer >= 1000) {
+            quest_blank = blank + blank + blank + blank;
+        } else if (quest_answer >= 100) {
+            quest_blank = blank + blank + blank;
+        } else if (quest_answer >= 10) {
+            quest_blank = blank + blank;
+        } else {
+            quest_blank = blank;
+        }
+        quest_question = quest_arg1 + quest_operator + quest_arg2 + quest_equal;
+
+        input_answerStr = "";
+        return quest_question + quest_blank;
+    }
+
+    //生成题目--比较题
+    function CreateQuestion2(hardMax, modeMin, modeMax) {
+        //计算正确的方程
+        CreateFormulaArgument(hardMax, modeMin, modeMax);
+
+        quest_blank = blank;
+        //计算一个错误的答案
+        let error_arg3 = RandomInt(1, hardMax);
+        quest_result = error_arg3.toString();
+        quest_question = quest_arg1 + quest_operator + quest_arg2;
+
+        if(error_arg3 < quest_answer){
+            quest_equal = ">";
+        }else if(error_arg3 > quest_answer){
+            quest_equal = "<";
+        }else{
+            quest_equal = "=";
+        }
+
+        input_answerStr = "";
+        return quest_question + quest_blank + quest_result;
+    }
+
+    //回答 计算问题
+    function InputAnswer1(char1) {
+        if (input_answerStr.length < quest_blank.length) {
+            //根据输入的字符 组成答案
+            input_answerStr = input_answerStr + char1;
+            quest_blank = MergeBlank(input_answerStr, quest_blank);
+        } else if (input_answerStr.length == quest_blank.length) {
+            //去掉最后一个
+            input_answerStr = input_answerStr.substr(0, input_answerStr.length - 1);
+            input_answerStr = input_answerStr + char1;
+            quest_blank = MergeBlank(input_answerStr, quest_blank);
+        }
+
+        return input_answerStr;
+    }
+
+    //删除最后一个输入
+    function DeleteInput() {
+        if (input_answerStr.length > 0) {
+            input_answerStr = input_answerStr.substr(0, input_answerStr.length - 1);
+            quest_blank = MergeBlank(input_answerStr, quest_blank);
+        }
+    }
+
+    //把输入和空白的进行组合
+    function MergeBlank(inputStr, questBlankStr) {
+        let str2 = "";
+        for (let i = 0, len = questBlankStr.length; i < len; i++) {
+            if (i < inputStr.length) {
+                str2 = str2 + inputStr.charAt(i);
+            } else {
+                str2 = str2 + blank;
+            }
+        }
+
+        return str2;
+    }
+    //绘制题目
+    function OutputQuest(str1) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let fontHei = (boardHeight - 20) + "px";
+        ctx.font = "normal " + fontHei + " Verdana";
+        ctx.fillStyle = "#000000";
+        let contentWidht = boardWidth - 15;
+        if (str1.length <= 6) {
+            contentWidht = boardWidth - 45;
+        }
+        ctx.fillText(str1, 5, boardHeight - 25, contentWidht);
+    }
+
+    //检查是否回答正确
+    function CheckAnswer() {
+        //如果当前序号超过 花的范围 清空
+        if (flower_index >= flower_number) {
+            flower_index = 0;
+            $('.flower').removeClass("flowerred");
+        }
+        //判断是否正确
+        let success = false;
+
+        if (quest_mode2 == 1 && quest_answer == parseInt(input_answerStr)) {
+            //计算题
+            success = true;
+            //答对
+            $("#audioright")[0].play();
+        }else if (quest_mode2 == 2 && input_answerStr == quest_equal){
+            //比较题
+            success = true;
+            //答对
+            $("#audioright")[0].play();
+        }else {
+            //打错
+            $("#audiowrong")[0].play();
+        }
+
+        if (success) {
+            $('.flower').eq(flower_index++).addClass("flowerred");
+            //生成下一题
+            OutputQuest(CreateQuestion());
+        }
+
+    }
+
     //加载后
-    window.onload = function(){
+    window.onload = function () {
         //绑定按钮事件
-        $(".cell").on("click",(e)=>{
-            //console.log($(e.target).text());
+        $(".cell").on("click", (e) => {
+            //console.log();
             $(".cell").removeClass("selected");
             $(e.target).addClass("selected");
+
+            let strInput = $(e.target).text();
+
+            if (strInput == "I±I") {
+                hard = 10;
+                hard_level = 1;
+                OutputQuest(CreateQuestion());
+            } else if (strInput == "II±II") {
+                hard = 100;
+                hard_level = 2;
+                OutputQuest(CreateQuestion());
+            } else if (strInput == "III±III") {
+                hard = 1000;
+                hard_level = 3;
+                OutputQuest(CreateQuestion());
+            } else if (strInput == "IxI") {
+                hard = 10;
+                hard_level = 4;
+                OutputQuest(CreateQuestion());
+            } else if (strInput == "Ok") {
+                //确认输入 检查是否正确
+                CheckAnswer();
+            } else if (strInput == "Del") {
+                //删除输入
+                DeleteInput();
+                OutputQuest(quest_question + quest_blank);
+            } else if (strInput == "=" || strInput == "<" || strInput == ">") {
+                //比较题=2
+                if(quest_mode2 == 2){
+                    InputAnswer1(strInput);
+                    //更新题目
+                    OutputQuest(quest_question + quest_blank + quest_result);
+                }
+            } else if (strInput != " " && quest_mode2 == 1) {
+                //计算题=1
+                //输入的是数字
+                InputAnswer1(strInput);
+                //更新题目
+                OutputQuest(quest_question + quest_blank);
+            }
+
+            $("#audioclick")[0].play();
+
         })
-    
+
+        //输出题目
+        OutputQuest(CreateQuestion());
     }
 </script>
+
 </html>
