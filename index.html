@@ -60,7 +60,9 @@
     window.onload = function(){
         //绑定按钮事件
         $(".cell").on("click",(e)=>{
-            console.log($(e.target).text());
+            //console.log($(e.target).text());
+            $(".cell").removeClass("selected");
+            $(e.target).addClass("selected");
         })
     
     }

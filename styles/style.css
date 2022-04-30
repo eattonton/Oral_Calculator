@@ -4,7 +4,7 @@
 
 .board{
     background-color: #cdcdcd;
-    height: 5em;
+    height: 5.5em;
     margin: 0;
     padding: 0;
 }
@@ -84,4 +84,9 @@
     font-family:'Courier New', Courier, monospace;
     background-color:darkturquoise;
     color: #fff;
+}
+
+.selected{
+    color: black !important;
+    background-color:cyan !important;      /*增加权重，否则后加属性不生效*/
 }
